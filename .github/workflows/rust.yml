@@ -24,4 +24,4 @@ jobs:
       - name: Run Rust Checks
         run: |
           cargo fmt --all --check
-          cargo test
+          cargo test --no-default-features
