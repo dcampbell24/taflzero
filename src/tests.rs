@@ -1,8 +1,67 @@
 #![cfg(test)]
 
+use std::error::Error;
+use std::io::Cursor;
+
+use crate::Engine;
 use crate::board::board::Board;
 use crate::board::types::{Piece, Side, Square};
 use crate::board::utils::{get_col, get_row, get_square_from_algebraic};
+use crate::mv::{Move, create_move_from_algebraic};
+
+#[derive(Debug, serde::Deserialize)]
+struct Record {
+    moves: String,
+    _attacker_captures: u64,
+    _defender_captures: u64,
+    _status: String,
+}
+
+pub fn aagenielsen_dk_game_records() -> Vec<Vec<Move>> {
+    let copenhagen_csv = include_str!("copenhagen.csv");
+    let cursor = Cursor::new(copenhagen_csv);
+
+    let mut rdr = csv::ReaderBuilder::new()
+        .has_headers(false)
+        .from_reader(cursor);
+
+    let mut game_records = Vec::with_capacity(1_800);
+
+    for result in rdr.deserialize() {
+        let record: Record = result.unwrap();
+        let mut record_taflzero = Vec::new();
+
+        for play in record.moves.split_ascii_whitespace() {
+            if play.contains('-') {
+                let vertexes: Vec<_> = play.split('-').collect();
+                let from = vertexes[0];
+                let to_capture: Vec<_> = vertexes[1].split('x').collect();
+                let to = to_capture[0];
+
+                let play = create_move_from_algebraic(&format!("{from}{to}")).unwrap();
+                record_taflzero.push(play);
+            }
+        }
+
+        game_records.push(record_taflzero);
+    }
+
+    game_records
+}
+
+#[test]
+fn play_outs() -> Result<(), Box<dyn Error>> {
+    let mut client = Engine::new("default_nn.onnx".to_string());
+
+    for mvs in aagenielsen_dk_game_records() {
+        client.set_start_position();
+        for mv in mvs {
+            client.make_move(mv)?;
+        }
+    }
+
+    Ok(())
+}
 
 fn expect_occupied(board: &Board, sq: Square) {
     let row = get_row(sq);

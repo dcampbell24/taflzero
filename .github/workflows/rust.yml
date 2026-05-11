@@ -23,5 +23,9 @@ jobs:
 
       - name: Run Rust Checks
         run: |
+          sudo apt update
+          sudo apt install git-lfs
+          git-lfs fetch
+          git-lfs pull
           cargo fmt --all --check
           cargo test --no-default-features
