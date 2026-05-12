@@ -325,12 +325,12 @@ mod tests {
     }
 
     mod historical {
-        use crate::Board;
+        use crate::board::Board;
+        use crate::board::rules::RulesEnum;
+        use crate::board::types::{Piece, Side};
         use crate::board::utils::get_square_from_algebraic;
         use crate::movegen::MoveGen;
         use crate::movegen::tests::{expect_moves_count, expect_moves_exists};
-        use crate::rules::RulesEnum;
-        use crate::types::{Piece, Side};
         use std::error::Error;
 
         #[test]

@@ -11,7 +11,6 @@ mod timer;
 mod uci;
 pub mod utils;
 
-pub use board::*;
 pub use engine::*;
 pub use evaluation::*;
 pub use moves::*;

@@ -1,8 +1,8 @@
 use crate::board::constants::{BOARD_SIZE, HOLE, SQS};
+use crate::board::types::OptionalSquare;
 use crate::board::types::{Piece, Square};
 use crate::board::utils::is_edge_square;
 use crate::board::{Board, PRECOMPUTED};
-use crate::types::OptionalSquare;
 use std::collections::{HashSet, VecDeque};
 
 struct Area {
@@ -314,9 +314,9 @@ where
 mod tests {
     use super::check_fort;
     use crate::board::Board;
+    use crate::board::set_board_from_str;
     use crate::board::types::Piece;
     use crate::board::utils::get_square_from_algebraic;
-    use crate::set_board_from_str;
 
     #[test]
     fn empty_king_not_fort() {

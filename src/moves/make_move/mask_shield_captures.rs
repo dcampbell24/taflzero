@@ -1,9 +1,9 @@
 use crate::board::constants::BOARD_SIZE;
+use crate::board::types::OptionalSquare;
 use crate::board::types::{Piece, Side, Square};
 use crate::board::utils::{get_col, get_row};
 use crate::board::{Board, PRECOMPUTED, get_side_by_piece};
 use crate::moves::undo::{CapturedPiece, UndoMove};
-use crate::types::OptionalSquare;
 
 #[derive(Copy, Clone)]
 pub enum ShieldSide {

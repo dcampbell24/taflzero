@@ -1,7 +1,7 @@
 use crate::board::constants::BOARD_SIZE;
+use crate::board::types::Square;
 use crate::board::utils::{get_col, get_row, get_square};
 use crate::mv::Move;
-use crate::types::Square;
 
 const DIRECTIONS: u16 = 4;
 const MAX_DISTANCE: u16 = 10;

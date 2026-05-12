@@ -1,6 +1,6 @@
-use crate::PRECOMPUTED;
+use crate::board::PRECOMPUTED;
 use crate::board::constants::SQS;
-use crate::position_export::BitPosition;
+use crate::board::position_export::BitPosition;
 
 pub const NUM_PLANES: usize = 6;
 pub const POLICY_SIZE: usize = 4840;

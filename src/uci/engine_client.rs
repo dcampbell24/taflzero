@@ -1,9 +1,9 @@
 use crate::Engine;
+use crate::board::rules::get_rules_enum_from_str;
+use crate::board::types::{Piece, Side, Square};
 use crate::movegen::MoveGen;
 use crate::mv::{Move, create_move_from_algebraic};
-use crate::rules::get_rules_enum_from_str;
 use crate::terminal::check_terminal;
-use crate::types::{Piece, Side, Square};
 use wasm_bindgen::prelude::wasm_bindgen;
 
 #[wasm_bindgen]
