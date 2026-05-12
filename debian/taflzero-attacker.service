@@ -1,0 +1,11 @@
+[Unit]
+Description=TaflZero AI
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/games/hnefatafl-org-taflzero --username ${USERNAME} --password ${PASSWORD} --role attacker --systemd
+EnvironmentFile=/etc/hnefatafl-org-taflzero-attacker.conf
+
+[Install]
+WantedBy=multi-user.target

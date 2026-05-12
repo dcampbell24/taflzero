@@ -23,10 +23,41 @@ web-sys = { version = "0.3", features = [
 console_error_panic_hook = "0.1.7"
 once_cell = "1.21.3"
 
+# hnefatafl-copenhagen
+hnefatafl-copenhagen = { version = "5.11.0", default-features = false, optional = true }
+anyhow = { version = "1", optional = true }
+clap = { version = "4", optional = true }
+env_logger = { version = "0.11", optional = true }
+log = { version = "0.4", optional = true }
+socket2 = { version = "0.6", optional = true }
+
 [features]
 default = ["cuda", "directml"]
 cuda = ["ort/cuda"]
 directml = ["ort/directml"]
+hnefatafl_org = [
+    "dep:hnefatafl-copenhagen",
+    "dep:anyhow",
+    "dep:clap",
+    "dep:env_logger",
+    "dep:log",
+    "dep:socket2"
+]
+
+[[bin]]
+name = "hnefatafl-org-taflzero"
+required-features = ["hnefatafl_org"]
+
+[package.metadata.deb]
+copyright = "2026 TaflZero Developers"
+maintainer = "David Campbell <david@hnefatafl.org>"
+extended-description = "The TaflZero AI made to play on hnefatafl.org servers."
+assets = [
+    ["debian/taflzero-attacker.service", "lib/systemd/system/", "644"],
+    ["debian/taflzero-defender.service", "lib/systemd/system/", "644"],
+    ["target/release/hnefatafl-org-taflzero", "usr/games/", "755"],
+]
+section = "games"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 ort = { version = "=2.0.0-rc.11" }
