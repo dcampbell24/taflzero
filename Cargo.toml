@@ -27,6 +27,7 @@ once_cell = "1.21.3"
 default = ["cuda", "directml"]
 cuda = ["ort/cuda"]
 directml = ["ort/directml"]
+openvino = [ "ort/openvino" ]
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 ort = { version = "=2.0.0-rc.11" }
