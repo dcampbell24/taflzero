@@ -3,13 +3,13 @@ pub mod king_is_surrounded;
 mod mask_shield_captures;
 
 use crate::board::types::OptionalSquare;
+use crate::board::types::{Piece, Side, Square};
 use crate::board::{Board, PRECOMPUTED};
 use crate::moves::make_move::is_capture_possible::is_capture_possible;
 use crate::moves::make_move::king_is_surrounded::king_is_surrounded;
 use crate::moves::make_move::mask_shield_captures::make_shield_wall_captures;
 use crate::moves::mv::Move;
 use crate::moves::undo::{CapturedPiece, UndoMove};
-use crate::types::{Piece, Side, Square};
 
 impl Board {
     fn add_position_to_rep_table(&mut self) {
@@ -205,7 +205,7 @@ mod tests {
 
     mod shieldwall_rule {
         use super::*;
-        use crate::rules::RulesEnum;
+        use crate::board::rules::RulesEnum;
 
         #[test]
         fn capture_2_surrounded_pieces() {
@@ -778,10 +778,10 @@ mod tests {
     mod king_capture_rule {
         use std::error::Error;
 
-        use crate::Board;
+        use crate::board::Board;
+        use crate::board::types::{OptionalSquare, Piece, Side};
         use crate::board::utils::get_square_from_algebraic;
         use crate::mv::create_move_from_algebraic;
-        use crate::types::{OptionalSquare, Piece, Side};
         use crate::undo::{CapturedPiece, UndoMove};
 
         #[test]

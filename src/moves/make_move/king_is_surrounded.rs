@@ -222,10 +222,10 @@ mod tests {
     mod historical_variant {
         use super::*;
         use crate::board::Board;
+        use crate::board::rules::RulesEnum;
+        use crate::board::set_board_from_str;
         use crate::board::types::Piece;
         use crate::board::utils::get_square_from_algebraic;
-        use crate::rules::RulesEnum;
-        use crate::set_board_from_str;
 
         #[test]
         fn surrounded_by_attackers_from_all_sides_on_throne() {

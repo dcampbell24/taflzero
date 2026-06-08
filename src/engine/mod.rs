@@ -3,16 +3,16 @@ use std::sync::{Arc, atomic::AtomicBool};
 use wasm_bindgen::prelude::*;
 
 use crate::board::Board;
+use crate::board::rules::RulesEnum;
+use crate::board::types::Side;
 use crate::mcts::mcts::MCTSTree;
 use crate::mv::Move;
-use crate::rules::RulesEnum;
 use crate::search::nn::NeuralNet;
 use crate::search::search_data::SearchData;
 use crate::search::search_root::{
     SearchIterationResponse, SearchResponse, search_root, search_root_nodes,
 };
 use crate::terminal::check_terminal;
-use crate::types::Side;
 
 #[wasm_bindgen]
 pub struct Engine {

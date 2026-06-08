@@ -1,5 +1,5 @@
+use taflzero::board::rules::{RulesEnum, get_rules_enum_from_str};
 use taflzero::gen_train_data::gen_train_data;
-use taflzero::rules::{RulesEnum, get_rules_enum_from_str};
 use taflzero::search::nn::NeuralNet;
 use taflzero::{ConsoleClient, UciRunState};
 

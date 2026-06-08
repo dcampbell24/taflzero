@@ -1,13 +1,13 @@
-use crate::Board;
+use crate::board::Board;
+use crate::board::position_export::BitPosition;
+use crate::board::types::ZobristHash;
 use crate::movegen::MoveGen;
 use crate::mv::Move;
-use crate::position_export::BitPosition;
 use crate::search::mcts::utils::move_to_policy_index;
 use crate::search::nn::NeuralNet;
 use crate::search_data::SearchData;
 use crate::search_root::SearchIterationResponse;
 use crate::terminal::check_terminal;
-use crate::types::ZobristHash;
 use crate::undo::UndoMove;
 use rand::SeedableRng;
 use rand::distr::Distribution;
