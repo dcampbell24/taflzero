@@ -9,7 +9,7 @@ use crate::movegen::MoveGen;
 use crate::search::nn::NeuralNet;
 use crate::search_data::SearchData;
 use crate::terminal::{TerminalType, check_terminal, get_terminal, is_threefold_repetition};
-use rand::Rng;
+use rand::RngExt;
 use rand::prelude::StdRng;
 use std::fs::OpenOptions;
 use std::io::{BufWriter, Write};
@@ -26,7 +26,7 @@ fn set_piece_to_random_square(
         return;
     }
 
-    let idx = rnd.gen_range(0..empty_squares.len());
+    let idx = rnd.random_range(0..empty_squares.len());
     let sq = empty_squares.swap_remove(idx);
 
     board.set_piece(sq, piece).expect("set_piece");
@@ -39,8 +39,8 @@ fn set_random_position(rnd: &mut StdRng) -> Board {
         .filter(|&sq| !PRECOMPUTED.corners_sq.contains(&sq))
         .collect();
 
-    let attacker_pieces_count = rnd.gen_range(24..=50);
-    let defender_pieces_count = rnd.gen_range(0..=12);
+    let attacker_pieces_count = rnd.random_range(24..=50);
+    let defender_pieces_count = rnd.random_range(0..=12);
 
     set_piece_to_random_square(&mut board, &mut empty_squares, rnd, Piece::KING);
 

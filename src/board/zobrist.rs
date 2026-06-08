@@ -1,7 +1,7 @@
 use crate::board::constants::SQS;
 use crate::board::types::ZobristHash;
 use rand::rngs::StdRng;
-use rand::{RngCore, SeedableRng};
+use rand::{RngExt, SeedableRng};
 use std::sync::LazyLock;
 
 const PIECES_COUNT: usize = 4;
@@ -20,11 +20,11 @@ fn generate_zobrist() -> ZobristData {
 
     for p in 0..PIECES_COUNT {
         for sq in 0..SQS {
-            table[p][sq] = rng.next_u64()
+            table[p][sq] = rng.random::<u64>()
         }
     }
 
-    let side = rng.next_u64();
+    let side = rng.random::<u64>();
 
     ZobristData { table, side }
 }
