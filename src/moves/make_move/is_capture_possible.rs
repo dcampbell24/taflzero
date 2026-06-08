@@ -56,9 +56,9 @@ mod tests {
 
     use super::*;
     use crate::board::board::Board;
+    use crate::board::rules::RulesEnum;
     use crate::board::types::Piece;
     use crate::board::utils::get_square_from_algebraic;
-    use crate::rules::RulesEnum;
 
     #[test]
     fn attacker_capture_defender_simple() -> Result<(), Box<dyn Error>> {
@@ -383,7 +383,7 @@ mod tests {
 
     mod historical_variant {
         use super::*;
-        use crate::rules::RulesEnum;
+        use crate::board::rules::RulesEnum;
 
         #[test]
         fn no_capture_on_first_corner() -> Result<(), Box<dyn Error>> {

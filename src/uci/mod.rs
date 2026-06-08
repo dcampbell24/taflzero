@@ -492,7 +492,7 @@ impl ConsoleClient {
     }
 }
 
-use crate::rules::get_rules_enum_from_str;
+use crate::board::rules::get_rules_enum_from_str;
 #[cfg(target_arch = "wasm32")]
 use js_sys::global;
 #[cfg(target_arch = "wasm32")]

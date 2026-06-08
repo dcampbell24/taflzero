@@ -54,9 +54,9 @@ impl BitPosition {
 mod tests {
     use crate::board::constants::BOARD_SIZE;
     use crate::board::position_export::BitPosition;
+    use crate::board::types::Side;
     use crate::board::utils::get_square;
-    use crate::types::Side;
-    use crate::{Board, set_board_from_str};
+    use crate::board::{Board, set_board_from_str};
 
     fn defenders_plane(bit_position: &BitPosition, plane: usize) -> String {
         let base = plane * 16;

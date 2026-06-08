@@ -1,14 +1,14 @@
+use crate::board::position_export::BitPosition;
+use crate::board::rules::RulesEnum;
+use crate::board::types::{Piece, Side};
+use crate::board::{Board, PRECOMPUTED};
 use crate::mcts::export::{LegalMask, PendingSample};
 use crate::mcts::mcts::{MCTSConfig, MCTSTree, mcts_search};
 use crate::mcts::utils::move_to_policy_index;
 use crate::movegen::MoveGen;
-use crate::position_export::BitPosition;
-use crate::rules::RulesEnum;
 use crate::search::nn::NeuralNet;
 use crate::search_data::SearchData;
 use crate::terminal::{TerminalType, check_terminal, get_terminal, is_threefold_repetition};
-use crate::types::{Piece, Side};
-use crate::{Board, PRECOMPUTED};
 use rand::RngExt;
 use rand::prelude::StdRng;
 use std::fs::OpenOptions;

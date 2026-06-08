@@ -1,11 +1,13 @@
 use super::nn_common::{NUM_PLANES, NnOutput, POLICY_SIZE, SAMPLE_SIZE, build_input_data};
+use crate::board::position_export::BitPosition;
 use crate::masks::BOARD_SIZE;
-use crate::position_export::BitPosition;
 use ndarray::{Array, IxDyn};
 #[cfg(feature = "cuda")]
 use ort::execution_providers::CUDAExecutionProvider;
 #[cfg(feature = "directml")]
 use ort::execution_providers::DirectMLExecutionProvider;
+#[cfg(feature = "openvino")]
+use ort::execution_providers::OpenVINO;
 use ort::session::Session;
 use ort::value::Value;
 
@@ -23,7 +25,9 @@ impl NeuralNet {
         println!("[NN] Backend: CUDA");
         #[cfg(all(feature = "directml", not(feature = "cuda")))]
         println!("[NN] Backend: DirectML");
-        #[cfg(not(any(feature = "cuda", feature = "directml")))]
+        #[cfg(feature = "openvino")]
+        println!("[NN] Backend: OpenVINO");
+        #[cfg(not(any(feature = "cuda", feature = "directml", feature = "openvino")))]
         println!("[NN] Backend: CPU");
 
         let mut builder = Session::builder().unwrap();
@@ -47,6 +51,12 @@ impl NeuralNet {
         {
             builder = builder
                 .with_execution_providers([DirectMLExecutionProvider::default().build()])
+                .unwrap();
+        }
+        #[cfg(feature = "openvino")]
+        {
+            builder = builder
+                .with_execution_providers([OpenVINO::default().build()])
                 .unwrap();
         }
 
