@@ -244,9 +244,7 @@ impl<O: UciOutput> UciController<O> {
                                         engine.set_tree_memory_limit(Some(memory_limit));
                                         self.send(&format!("MemoryLimit set to {memory_limit}"));
                                     } else {
-                                        self.send(&format!(
-                                            "MemoryLimit must lie on the inteval (0, 1]"
-                                        ));
+                                        self.send("MemoryLimit must lie on the inteval (0, 1]");
                                     }
                                 }
                                 Err(_) => self.send("invalid f64"),

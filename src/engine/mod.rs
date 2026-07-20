@@ -35,8 +35,6 @@ fn get_multi_pv(multi_pv: usize) -> Option<usize> {
 
 impl Engine {
     pub fn new(net_path: String) -> Self {
-        let net_path = net_path;
-
         let config = EngineConfig {
             net_path: net_path.clone(),
         };

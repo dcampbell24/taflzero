@@ -5,13 +5,13 @@ use crate::board::utils::is_edge_square;
 use crate::board::{Board, PRECOMPUTED};
 use std::collections::{HashSet, VecDeque};
 
-struct Area {
+pub struct Area {
     pub squares: HashSet<Square>,
     pub is_move_possible: bool,
     pub attackers: HashSet<Square>,
 }
 
-struct AreaList {
+pub struct AreaList {
     areas: Vec<Area>,
     board_map: [Option<usize>; SQS],
 }
@@ -54,7 +54,7 @@ impl AreaList {
     }
 }
 
-fn revert_cleared_defenders(board: &mut Board, cleared_defenders: &Vec<OptionalSquare>) {
+fn revert_cleared_defenders(board: &mut Board, cleared_defenders: &[OptionalSquare]) {
     for &sq in cleared_defenders.iter() {
         board.set_piece(sq as Square, Piece::DEFENDER).unwrap();
     }

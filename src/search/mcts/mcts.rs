@@ -815,11 +815,8 @@ pub fn mcts_search(
                     } else {
                         (0, 0.5)
                     };
-                    let speed = if elapsed > 0 {
-                        iteration * 1000 / elapsed
-                    } else {
-                        0
-                    };
+
+                    let speed = (iteration * 1_000).checked_div(elapsed).unwrap_or_default();
 
                     callback(SearchIterationResponse {
                         score,
