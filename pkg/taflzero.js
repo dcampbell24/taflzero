@@ -353,6 +353,14 @@ export class SearchIterationResponse {
         wasm.__wbg_searchiterationresponse_free(ptr, 0);
     }
     /**
+     * Plies to a proven mate (>0 = we mate, <0 = we get mated), else None.
+     * @returns {number | undefined}
+     */
+    get mate() {
+        const ret = wasm.__wbg_get_searchiterationresponse_mate(this.__wbg_ptr);
+        return ret === Number.MAX_SAFE_INTEGER ? undefined : ret;
+    }
+    /**
      * @returns {number | undefined}
      */
     get multi_pv() {
@@ -393,6 +401,13 @@ export class SearchIterationResponse {
     get winrate() {
         const ret = wasm.__wbg_get_searchiterationresponse_winrate(this.__wbg_ptr);
         return ret;
+    }
+    /**
+     * Plies to a proven mate (>0 = we mate, <0 = we get mated), else None.
+     * @param {number | null} [arg0]
+     */
+    set mate(arg0) {
+        wasm.__wbg_set_searchiterationresponse_mate(this.__wbg_ptr, isLikeNone(arg0) ? Number.MAX_SAFE_INTEGER : (arg0) >> 0);
     }
     /**
      * @param {number | null} [arg0]
@@ -553,6 +568,20 @@ export class WasmClient {
         const ptr0 = passArray8ToWasm0(data, wasm.__wbindgen_export);
         const len0 = WASM_VECTOR_LEN;
         wasm.wasmclient_set_nn(this.__wbg_ptr, ptr0, len0);
+    }
+    /**
+     * Register the SharedArrayBuffer-backed views used for NN inference done
+     * by the onnxruntime-web worker.  Call once after construction, before any
+     * search.  See `nn_wasm::set_nn_buffers` for the buffer layout.
+     *   control: Int32Array [REQ, RESP, BATCH]
+     *   input:   Float32Array  max_batch * 1331   (SAMPLE_SIZE)
+     *   output:  Float32Array  max_batch * 4841   (POLICY_SIZE then value)
+     * @param {Int32Array} control
+     * @param {Float32Array} input
+     * @param {Float32Array} output
+     */
+    set_nn_buffers(control, input, output) {
+        wasm.wasmclient_set_nn_buffers(this.__wbg_ptr, addHeapObject(control), addHeapObject(input), addHeapObject(output));
     }
     /**
      * Register a SharedArrayBuffer-backed Int32Array as the stop signal.
@@ -738,9 +767,6 @@ function __wbg_get_imports() {
                 wasm.__wbindgen_export4(deferred0_0, deferred0_1, 1);
             }
         },
-        __wbg_getRandomValues_cc7f052a444bb2ce: function() { return handleError(function (arg0, arg1) {
-            globalThis.crypto.getRandomValues(getArrayU8FromWasm0(arg0, arg1));
-        }, arguments); },
         __wbg_instanceof_EventTarget_72098ffe4ac5efa2: function(arg0) {
             let result;
             try {
@@ -751,6 +777,14 @@ function __wbg_get_imports() {
             const ret = result;
             return ret;
         },
+        __wbg_length_e6bdba0734e5c7f5: function(arg0) {
+            const ret = getObject(arg0).length;
+            return ret;
+        },
+        __wbg_load_092326361fd87ff1: function() { return handleError(function (arg0, arg1) {
+            const ret = Atomics.load(getObject(arg0), arg1 >>> 0);
+            return ret;
+        }, arguments); },
         __wbg_load_452389fa0d16b447: function() { return handleError(function (arg0, arg1) {
             const ret = Atomics.load(getObject(arg0), arg1 >>> 0);
             return ret;
@@ -771,9 +805,19 @@ function __wbg_get_imports() {
             const ret = new CustomEvent(getStringFromWasm0(arg0, arg1), getObject(arg2));
             return addHeapObject(ret);
         }, arguments); },
+        __wbg_notify_cefc0187827ce499: function() { return handleError(function (arg0, arg1) {
+            const ret = Atomics.notify(getObject(arg0), arg1 >>> 0);
+            return ret;
+        }, arguments); },
         __wbg_now_d2e0afbad4edbe82: function() {
             const ret = Date.now();
             return ret;
+        },
+        __wbg_prototypesetcall_46d9a0b93af9df2d: function(arg0, arg1, arg2) {
+            Float32Array.prototype.set.call(getArrayF32FromWasm0(arg0, arg1), getObject(arg2));
+        },
+        __wbg_set_6f5ddc74972bd54e: function(arg0, arg1, arg2) {
+            getObject(arg0).set(getArrayF32FromWasm0(arg1, arg2));
         },
         __wbg_set_detail_016b98403f732421: function(arg0, arg1) {
             getObject(arg0).detail = getObject(arg1);
@@ -801,6 +845,18 @@ function __wbg_get_imports() {
             const ret = typeof window === 'undefined' ? null : window;
             return isLikeNone(ret) ? 0 : addHeapObject(ret);
         },
+        __wbg_store_26c6bfd2829c839e: function() { return handleError(function (arg0, arg1, arg2) {
+            const ret = Atomics.store(getObject(arg0), arg1 >>> 0, arg2);
+            return ret;
+        }, arguments); },
+        __wbg_subarray_7628896583dc2831: function(arg0, arg1, arg2) {
+            const ret = getObject(arg0).subarray(arg1 >>> 0, arg2 >>> 0);
+            return addHeapObject(ret);
+        },
+        __wbg_wait_884ad5cc4da58248: function() { return handleError(function (arg0, arg1, arg2) {
+            const ret = Atomics.wait(getObject(arg0), arg1 >>> 0, arg2);
+            return addHeapObject(ret);
+        }, arguments); },
         __wbindgen_cast_0000000000000001: function(arg0) {
             // Cast intrinsic for `F64 -> Externref`.
             const ret = arg0;
@@ -933,6 +989,11 @@ function dropObject(idx) {
     heap_next = idx;
 }
 
+function getArrayF32FromWasm0(ptr, len) {
+    ptr = ptr >>> 0;
+    return getFloat32ArrayMemory0().subarray(ptr / 4, ptr / 4 + len);
+}
+
 function getArrayJsValueFromWasm0(ptr, len) {
     ptr = ptr >>> 0;
     const mem = getDataViewMemory0();
@@ -943,17 +1004,20 @@ function getArrayJsValueFromWasm0(ptr, len) {
     return result;
 }
 
-function getArrayU8FromWasm0(ptr, len) {
-    ptr = ptr >>> 0;
-    return getUint8ArrayMemory0().subarray(ptr / 1, ptr / 1 + len);
-}
-
 let cachedDataViewMemory0 = null;
 function getDataViewMemory0() {
     if (cachedDataViewMemory0 === null || cachedDataViewMemory0.buffer.detached === true || (cachedDataViewMemory0.buffer.detached === undefined && cachedDataViewMemory0.buffer !== wasm.memory.buffer)) {
         cachedDataViewMemory0 = new DataView(wasm.memory.buffer);
     }
     return cachedDataViewMemory0;
+}
+
+let cachedFloat32ArrayMemory0 = null;
+function getFloat32ArrayMemory0() {
+    if (cachedFloat32ArrayMemory0 === null || cachedFloat32ArrayMemory0.byteLength === 0) {
+        cachedFloat32ArrayMemory0 = new Float32Array(wasm.memory.buffer);
+    }
+    return cachedFloat32ArrayMemory0;
 }
 
 function getStringFromWasm0(ptr, len) {
@@ -1087,6 +1151,7 @@ function __wbg_finalize_init(instance, module) {
     wasm = instance.exports;
     wasmModule = module;
     cachedDataViewMemory0 = null;
+    cachedFloat32ArrayMemory0 = null;
     cachedUint32ArrayMemory0 = null;
     cachedUint8ArrayMemory0 = null;
     wasm.__wbindgen_start();

@@ -55,6 +55,14 @@ export class SearchIterationResponse {
     private constructor();
     free(): void;
     [Symbol.dispose](): void;
+    /**
+     * Plies to a proven mate (>0 = we mate, <0 = we get mated), else None.
+     */
+    get mate(): number | undefined;
+    /**
+     * Plies to a proven mate (>0 = we mate, <0 = we get mated), else None.
+     */
+    set mate(value: number | null | undefined);
     get multi_pv(): number | undefined;
     set multi_pv(value: number | null | undefined);
     nodes: bigint;
@@ -93,6 +101,15 @@ export class WasmClient {
     run(cmd: string): void;
     set_nn(data: Uint8Array): void;
     /**
+     * Register the SharedArrayBuffer-backed views used for NN inference done
+     * by the onnxruntime-web worker.  Call once after construction, before any
+     * search.  See `nn_wasm::set_nn_buffers` for the buffer layout.
+     *   control: Int32Array [REQ, RESP, BATCH]
+     *   input:   Float32Array  max_batch * 1331   (SAMPLE_SIZE)
+     *   output:  Float32Array  max_batch * 4841   (POLICY_SIZE then value)
+     */
+    set_nn_buffers(control: Int32Array, input: Float32Array, output: Float32Array): void;
+    /**
      * Register a SharedArrayBuffer-backed Int32Array as the stop signal.
      * The main thread can stop an ongoing `go infinite` by calling:
      *   `Atomics.store(buffer, 0, 1)`
@@ -129,6 +146,7 @@ export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly __wbg_engine_free: (a: number, b: number) => void;
     readonly __wbg_engineclient_free: (a: number, b: number) => void;
+    readonly __wbg_get_searchiterationresponse_mate: (a: number) => number;
     readonly __wbg_get_searchiterationresponse_multi_pv: (a: number) => number;
     readonly __wbg_get_searchiterationresponse_nodes: (a: number) => bigint;
     readonly __wbg_get_searchiterationresponse_score: (a: number) => number;
@@ -140,6 +158,7 @@ export interface InitOutput {
     readonly __wbg_move_free: (a: number, b: number) => void;
     readonly __wbg_searchiterationresponse_free: (a: number, b: number) => void;
     readonly __wbg_searchresponse_free: (a: number, b: number) => void;
+    readonly __wbg_set_searchiterationresponse_mate: (a: number, b: number) => void;
     readonly __wbg_set_searchiterationresponse_multi_pv: (a: number, b: number) => void;
     readonly __wbg_set_searchiterationresponse_nodes: (a: number, b: bigint) => void;
     readonly __wbg_set_searchiterationresponse_score: (a: number, b: number) => void;
@@ -194,6 +213,7 @@ export interface InitOutput {
     readonly wasmclient_print_board: (a: number) => void;
     readonly wasmclient_run: (a: number, b: number, c: number) => void;
     readonly wasmclient_set_nn: (a: number, b: number, c: number) => void;
+    readonly wasmclient_set_nn_buffers: (a: number, b: number, c: number, d: number) => void;
     readonly wasmclient_set_stop_buffer: (a: number, b: number) => void;
     readonly main_js: () => void;
     readonly __wbindgen_export: (a: number, b: number) => number;
