@@ -207,10 +207,6 @@ impl MCTSTree {
         pv
     }
 
-    fn get_root_mut(&mut self) -> &mut MCTSNode {
-        &mut self.nodes[ROOT_ID]
-    }
-
     fn get_root_id(&self) -> NodeId {
         ROOT_ID
     }

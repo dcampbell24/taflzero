@@ -1,7 +1,7 @@
+use crate::board::Board;
 use crate::board::position_export::BitPosition;
 use crate::board::rules::RulesEnum;
-use crate::board::types::{Piece, Side};
-use crate::board::{Board, PRECOMPUTED};
+use crate::board::types::Side;
 use crate::mcts::export::{KING_CORNER_NONE, LegalMask, PendingSample, king_corner_index};
 use crate::mcts::mcts::{C_PUCT, MCTSConfig, MCTSTree, mcts_search};
 use crate::mcts::utils::move_to_policy_index;
@@ -93,45 +93,6 @@ impl CurriculumBuffer {
     }
 }
 
-// ─── Position generation helpers ─────────────────────────────────────────────
-
-fn set_piece_to_random_square(
-    board: &mut Board,
-    empty_squares: &mut Vec<usize>,
-    rnd: &mut StdRng,
-    piece: Piece,
-) {
-    if empty_squares.is_empty() {
-        return;
-    }
-    let idx = rnd.random_range(0..empty_squares.len());
-    let sq = empty_squares.swap_remove(idx);
-    board.set_piece(sq, piece).expect("set_piece");
-}
-
-fn set_random_position(rnd: &mut StdRng) -> Board {
-    let mut board = Board::new();
-    let mut empty_squares: Vec<usize> = (0..board.board.len())
-        .filter(|&sq| board.board[sq] == Piece::EMPTY)
-        .filter(|&sq| !PRECOMPUTED.corners_sq.contains(&sq))
-        .collect();
-
-    let attacker_pieces_count = rnd.random_range(24..=50);
-    let defender_pieces_count = rnd.random_range(0..=12);
-
-    set_piece_to_random_square(&mut board, &mut empty_squares, rnd, Piece::KING);
-
-    for _ in 0..attacker_pieces_count {
-        set_piece_to_random_square(&mut board, &mut empty_squares, rnd, Piece::ATTACKER);
-    }
-
-    for _ in 0..defender_pieces_count {
-        set_piece_to_random_square(&mut board, &mut empty_squares, rnd, Piece::DEFENDER);
-    }
-
-    board
-}
-
 // ─── Terminal type string ─────────────────────────────────────────────────────
 
 fn terminal_type_str(t: &TerminalType) -> &'static str {
@@ -149,7 +110,6 @@ fn terminal_type_str(t: &TerminalType) -> &'static str {
 fn play_game(
     nn: &mut NeuralNet,
     search_data: &mut SearchData,
-    variant: RulesEnum,
     start_board: Board,
     search_cfg: &SearchConfig,
     rng: &mut StdRng,
@@ -174,7 +134,7 @@ fn play_game(
     cheap_config.forced_playouts_k = 0.0;
 
     let game_result;
-    let mut terminal_str: Option<&'static str> = None;
+    let terminal_str: Option<&'static str>;
     let mut move_number: usize = 0;
     let mut mcts_tree = MCTSTree::new();
     let mut no_capture_counter = 0;
@@ -404,14 +364,8 @@ pub fn gen_train_data(
             b
         };
 
-        let (res, board_history, game_result, terminal_str) = play_game(
-            nn,
-            &mut search_data,
-            variant,
-            start_board,
-            &cfg.search,
-            &mut rng,
-        );
+        let (res, board_history, game_result, terminal_str) =
+            play_game(nn, &mut search_data, start_board, &cfg.search, &mut rng);
 
         games_played += 1;
         if is_curriculum_game {

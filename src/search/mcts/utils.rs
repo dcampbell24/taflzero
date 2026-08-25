@@ -1,6 +1,6 @@
-use crate::board::constants::BOARD_SIZE;
-use crate::board::types::Square;
-use crate::board::utils::{get_col, get_row, get_square};
+use crate::board::utils::{get_col, get_row};
+#[cfg(test)]
+use crate::board::{constants::BOARD_SIZE, types::Square, utils::get_square};
 use crate::mv::Move;
 
 const DIRECTIONS: u16 = 4;
@@ -60,6 +60,7 @@ pub fn move_to_policy_index(mv: Move) -> u16 {
     from * (DIRECTIONS * MAX_DISTANCE) + direction * MAX_DISTANCE + (distance - 1)
 }
 
+#[cfg(test)]
 pub fn policy_index_to_move(index: u16) -> Option<Move> {
     let from = index / (DIRECTIONS * MAX_DISTANCE);
     let direction = (index / MAX_DISTANCE) % DIRECTIONS;

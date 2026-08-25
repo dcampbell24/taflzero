@@ -58,7 +58,6 @@ mod tests {
 
     use super::*;
     use crate::board::board::Board;
-    use crate::board::rules::RulesEnum;
     use crate::board::types::Piece;
     use crate::board::utils::get_square_from_algebraic;
 

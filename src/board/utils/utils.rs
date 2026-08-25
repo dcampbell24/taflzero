@@ -3,7 +3,6 @@ use crate::board::types::{Col, Piece, Row, Side, Square};
 use wasm_bindgen::prelude::wasm_bindgen;
 
 #[wasm_bindgen]
-#[inline(always)]
 pub fn get_square(row: Row, col: Col) -> Square {
     row * BOARD_SIZE + col
 }
@@ -16,13 +15,11 @@ pub fn get_square_from_algebraic(coord: &str) -> Square {
     get_square(rank as Row, file as Col)
 }
 
-#[inline(always)]
 #[wasm_bindgen]
 pub fn get_row(sq: Square) -> Row {
     sq / BOARD_SIZE
 }
 
-#[inline(always)]
 #[wasm_bindgen]
 pub fn get_col(sq: Square) -> Col {
     sq % BOARD_SIZE

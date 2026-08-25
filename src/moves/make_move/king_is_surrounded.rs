@@ -202,8 +202,6 @@ mod tests {
         use crate::board::Board;
         use crate::board::rules::RulesEnum;
         use crate::board::set_board_from_str;
-        use crate::board::types::Piece;
-        use crate::board::utils::get_square_from_algebraic;
 
         #[test]
         fn surrounded_by_attackers_from_all_sides_on_throne() {
