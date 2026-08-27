@@ -6,7 +6,7 @@ rust-version = "1.91"
 description = "Artificial intelligence that plays Copenhagen Hnefatafl and Historical Hnefatafl"
 license = "GPL-3.0-or-later"
 repository = "https://github.com/sovelin/taflzero"
-keywords = ["artifical-intelligence", "hnefatafl"]
+keywords = ["ai", "hnefatafl"]
 categories = ["artificial-intelligence", "game-engines"]
 include = ["src/**/*", "LICENSE", "README.md"]
 
