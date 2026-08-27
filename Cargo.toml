@@ -3,6 +3,15 @@ name = "taflzero"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.91"
+description = "Artificial intelligence that plays Copenhagen Hnefatafl and Historical Hnefatafl"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/sovelin/taflzero"
+keywords = ["artifical-intelligence", "hnefatafl"]
+categories = ["artificial-intelligence", "game-engines"]
+include = ["src/**/*", "LICENSE", "README.md"]
+
+[lints.clippy]
+cargo = "deny"
 
 [dev-dependencies]
 csv = "1"
