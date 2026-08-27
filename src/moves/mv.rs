@@ -40,43 +40,36 @@ impl Display for Move {
 
 #[wasm_bindgen]
 impl Move {
-    #[inline]
     #[wasm_bindgen(constructor)]
     pub fn new(from: Square, to: Square) -> Self {
         Move(((from as u32) << 16) | (to as u32))
     }
 
-    #[inline]
     #[wasm_bindgen]
     pub fn from(&self) -> Square {
         ((self.0 >> 16) & 0xFFFF) as Square
     }
 
-    #[inline]
     #[wasm_bindgen]
     pub fn to(&self) -> Square {
         (self.0 & 0xFFFF) as Square
     }
 
-    #[inline]
     #[wasm_bindgen]
     pub fn raw(&self) -> u32 {
         self.0
     }
 
-    #[inline]
     #[wasm_bindgen]
     pub fn is_null(&self) -> bool {
         self.0 == 0
     }
 
-    #[inline]
     #[wasm_bindgen]
     pub fn create_null() -> Self {
         Move(0)
     }
 
-    #[inline]
     #[wasm_bindgen]
     pub fn from_u32(mv_u32: u32) -> Self {
         Move(mv_u32)

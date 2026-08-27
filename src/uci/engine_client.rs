@@ -1,3 +1,5 @@
+#![cfg(target_family = "wasm")]
+
 use crate::Engine;
 use crate::board::rules::get_rules_enum_from_str;
 use crate::board::types::{Piece, Side, Square};
