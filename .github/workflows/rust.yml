@@ -4,6 +4,9 @@ name: All of the Rust Commit Checks
 permissions:
   actions: read
 
+env:
+  RUSTFLAGS: "-D warnings"
+
 jobs:
   check:
     name: Check
