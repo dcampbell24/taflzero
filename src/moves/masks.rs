@@ -62,7 +62,7 @@ fn build_line_mask_dir(occ: Mask, pos: usize, dir: Direction) -> i8 {
 
 pub static LINE_MOVES: LazyLock<[[Mask; OCC_STATES]; BOARD_SIZE]> = LazyLock::new(|| {
     let mut table = [[0u16; OCC_STATES]; BOARD_SIZE];
-     for (pos, position) in table.iter_mut().enumerate().take(BOARD_SIZE) {
+    for (pos, position) in table.iter_mut().enumerate().take(BOARD_SIZE) {
         for (occ, occupied) in position.iter_mut().enumerate().take(OCC_STATES) {
             *occupied = build_line_mask(pos, occ as Mask);
         }
